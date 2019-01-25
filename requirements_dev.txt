@@ -1,0 +1,6 @@
+# Requirements required by this package:
+-r requirements.txt
+
+# Requirements needed for development & build & testing
+pytest
+tox
