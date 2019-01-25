@@ -1,0 +1,45 @@
+language: python
+
+cache: pip
+
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "pypy3.5"
+
+env:
+  - DJANGO_VERSION=1.11
+  - DJANGO_VERSION=2.0
+  - DJANGO_VERSION=2.1
+
+matrix:
+    exclude:
+        - python: "2.7"
+          env: DJANGO_VERSION=2.0
+        - python: "2.7"
+          env: DJANGO_VERSION=2.1
+        - python: "3.4"
+          env: DJANGO_VERSION=1.11
+        - python: "3.5"
+          env: DJANGO_VERSION=1.11
+        - python: "3.6"
+          env: DJANGO_VERSION=1.11
+        - python: "3.7"
+          env: DJANGO_VERSION=1.11
+        - python: "pypy3.5"
+          env: DJANGO_VERSION=1.11
+
+# command to install dependencies
+install:
+  - pip install -q Django=$DJANGO_VERSION
+  - pip install -q -r requirements_dev.txt
+
+# command to run tests
+script:
+  - pytest
+  - python setup.py build
+  - python setup.py install
+
