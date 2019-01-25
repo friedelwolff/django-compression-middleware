@@ -1,3 +1,5 @@
+dist: xenial
+
 language: python
 
 cache: pip
@@ -23,6 +25,8 @@ matrix:
           env: DJANGO_VERSION=2.1
         - python: "3.4"
           env: DJANGO_VERSION=1.11
+        - python: "3.4"
+          env: DJANGO_VERSION=2.1
         - python: "3.5"
           env: DJANGO_VERSION=1.11
         - python: "3.6"
