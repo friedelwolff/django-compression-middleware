@@ -1,10 +1,7 @@
 ===========================================================================
-Django Compresion Middleware: *Middleware to compress responses*
+Django Compresion Middleware
 ===========================================================================
 
-
-Introduction
-------------
 
 This middleware implements compressed content encoding for HTTP. It is similar
 to Django's ``GZipMiddleware`` (`documentation`_), but additionally supports
@@ -15,7 +12,7 @@ The middleware is focussed on the task of compressing typical Django responses
 such as HTML, JSON, etc.  For static file compression, have a look at other
 projects such as `WhiteNoise`_.
 
-Most browsers now support Brotli compresssion (check support status on `Can I
+Most browsers now support Brotli compression (check support status on `Can I
 use... Brotli`_). The middleware will choose the best compression method
 supported by the client. In order of preference:
 
@@ -33,7 +30,7 @@ Installation
 ------------
 
 - Supported Python versions: 2.7, 3.4, 3.5, 3.6 and 3.7.
-  CPython and PyPy is supported.
+  CPython and PyPy are supported.
 - Supported Django versions: 1.11 (LTS), 2.0, 2.1.
 
 .. code:: shell
@@ -63,7 +60,7 @@ only supported on secure connections by default).
 Credits and Resources
 ---------------------
 
-The code and tests in this project is based on Django's ``GZipMiddleware`` and
+The code and tests in this project are based on Django's ``GZipMiddleware`` and
 Vašek Dohnal's ``django-brotli``. For compression, it uses:
 
 - The `Brotli`_ bindings or `brotlipy`_. The latter is preferred on PyPy since
