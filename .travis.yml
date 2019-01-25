@@ -34,7 +34,7 @@ matrix:
 
 # command to install dependencies
 install:
-  - pip install -q Django=$DJANGO_VERSION
+  - pip install -q Django~=$DJANGO_VERSION
   - pip install -q -r requirements_dev.txt
 
 # command to run tests
