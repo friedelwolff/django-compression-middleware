@@ -1,12 +1,13 @@
 ===========================================================================
-Django Compresion Middleware
+Django Compression Middleware
 ===========================================================================
 
 
 This middleware implements compressed content encoding for HTTP. It is similar
 to Django's ``GZipMiddleware`` (`documentation`_), but additionally supports
 other compression methods. It is meant to be a drop-in replacement for Django's
-``GZipMiddleware``.
+``GZipMiddleware``. Its documentation — including security warnings — therefore
+apply here as well.
 
 The middleware is focussed on the task of compressing typical Django responses
 such as HTML, JSON, etc.  For static file compression, have a look at other
@@ -85,8 +86,11 @@ Contributing
 2. Create a virtualenv
 3. Install package dependencies: ``pip install --upgrade -r requirements_dev.txt``
 4. Change some code
-5. Run tests: in project root simply execute ``pytest``, but preferably ``tox``.
-6. Submit a pull request :-)
+5. Run the tests: in the project root simply execute ``pytest``, and afterwards
+   preferably ``tox`` to test the full test matrix. If you don't have all the
+   Python interpreters, consider running ``tox --skip-missing-interpreters``.
+6. Submit a pull request and check for any errors reported by the Continuous
+   Integration service.
 
 License
 -------
