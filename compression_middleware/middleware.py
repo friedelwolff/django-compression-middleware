@@ -108,6 +108,7 @@ class CompressionMiddleware(MiddlewareMixin):
 
         if response.streaming:
             # We currently only support stream compression with gzip. TODO!
+            encoding = 'gzip'
 
             # Delete the `Content-Length` header for streaming content, because
             # we won't know the compressed size until we stream it.
