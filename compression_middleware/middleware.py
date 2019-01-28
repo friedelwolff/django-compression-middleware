@@ -22,7 +22,7 @@ from django.utils.cache import patch_vary_headers
 
 try:
     from django.utils.deprecation import MiddlewareMixin
-except ImportError:
+except ImportError: # pragma: no cover
     MiddlewareMixin = object
 
 
