@@ -171,8 +171,8 @@ class StreamingTest(SimpleTestCase):
         Compression is performed on responses with streaming content.
         """
         r = CompressionMiddleware().process_response(self.req, self.stream_resp)
-        self.assertEqual(gzip_decompress(b''.join(r)), b''.join(self.sequence))
-        self.assertEqual(r.get('Content-Encoding'), 'gzip')
+        self.assertEqual(brotli.decompress(b''.join(r)), b''.join(self.sequence))
+        self.assertEqual(r.get('Content-Encoding'), 'br')
         self.assertFalse(r.has_header('Content-Length'))
 
     def test_compress_streaming_response_unicode(self):
@@ -181,8 +181,8 @@ class StreamingTest(SimpleTestCase):
         """
         r = CompressionMiddleware().process_response(self.req, self.stream_resp_unicode)
         self.assertEqual(
-            gzip_decompress(b''.join(r)),
+            brotli.decompress(b''.join(r)),
             b''.join(x.encode('utf-8') for x in self.sequence_unicode)
         )
-        self.assertEqual(r.get('Content-Encoding'), 'gzip')
+        self.assertEqual(r.get('Content-Encoding'), 'br')
         self.assertFalse(r.has_header('Content-Length'))
