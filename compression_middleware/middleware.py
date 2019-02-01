@@ -17,7 +17,10 @@ __all__ = ['CompressionMiddleware']
 
 from .br import brotli_compress
 
-from django.middleware.gzip import compress_string as gzip_compress, compress_sequence
+from django.middleware.gzip import (
+        compress_string as gzip_compress,
+        compress_sequence as gzip_compress_stream,
+)
 from django.utils.cache import patch_vary_headers
 
 try:
@@ -108,7 +111,7 @@ class CompressionMiddleware(MiddlewareMixin):
 
             # Delete the `Content-Length` header for streaming content, because
             # we won't know the compressed size until we stream it.
-            response.streaming_content = compress_sequence(response.streaming_content)
+            response.streaming_content = gzip_compress_stream(response.streaming_content)
             del response['Content-Length']
         else:
             compressed_content = compress_func(response.content)
