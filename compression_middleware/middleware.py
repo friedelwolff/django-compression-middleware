@@ -15,7 +15,7 @@
 __all__ = ['CompressionMiddleware']
 
 
-from .br import brotli_compress
+from .br import brotli_compress, brotli_compress_stream
 
 from django.middleware.gzip import (
         compress_string as gzip_compress,
@@ -49,9 +49,10 @@ MIN_IMPROVEMENT = 100
 
 
 # supported encodings in order of preference
+# (encoding, bulk_compressor, stream_compressor)
 compressors = (
-        ('br', brotli_compress),
-        ('gzip', gzip_compress),
+        ('br', brotli_compress, brotli_compress_stream),
+        ('gzip', gzip_compress, gzip_compress_stream),
 )
 
 
@@ -76,10 +77,10 @@ def compressor(accept_encoding):
     if "*" in client_encodings:
         # Our first choice:
         return compressors[0]
-    for encoding, compress_func in compressors:
+    for encoding, compress_func, stream_func in compressors:
         if encoding in client_encodings:
-            return (encoding, compress_func)
-    return (None, None)
+            return (encoding, compress_func, stream_func)
+    return (None, None, None)
 
 
 class CompressionMiddleware(MiddlewareMixin):
@@ -99,16 +100,13 @@ class CompressionMiddleware(MiddlewareMixin):
 
         patch_vary_headers(response, ('Accept-Encoding',))
         ae = request.META.get('HTTP_ACCEPT_ENCODING', '')
-        encoding, compress_func = compressor(ae)
+        encoding, compress_func, stream_func = compressor(ae)
         if not encoding:
             # No compression in common with client (the client probably didn't
             # indicate support for anything).
             return response
 
         if response.streaming:
-            # We currently only support stream compression with gzip. TODO!
-            encoding = 'gzip'
-
             # Delete the `Content-Length` header for streaming content, because
             # we won't know the compressed size until we stream it.
             response.streaming_content = gzip_compress_stream(response.streaming_content)
