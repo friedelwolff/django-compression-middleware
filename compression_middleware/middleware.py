@@ -109,7 +109,7 @@ class CompressionMiddleware(MiddlewareMixin):
         if response.streaming:
             # Delete the `Content-Length` header for streaming content, because
             # we won't know the compressed size until we stream it.
-            response.streaming_content = gzip_compress_stream(response.streaming_content)
+            response.streaming_content = stream_func(response.streaming_content)
             del response['Content-Length']
         else:
             compressed_content = compress_func(response.content)
