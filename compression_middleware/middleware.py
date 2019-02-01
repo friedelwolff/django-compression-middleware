@@ -37,9 +37,9 @@ MIN_LEN = 500
 # The compression has to reduce the length, otherwise we're just fooling
 # around. Since we'll have to add the Content-Encoding header, we need to
 # make that addition worthwhile, too. So the compressed response must be
-# smaller by some margin. This value should be at least 23 which is
-# len("Content-Encoding: gzip\n"), but a bigger value could reflect that a non-
-# trivial improvement in transfer time is required to make up for the time
+# smaller by some margin. This value should be at least 24 which is
+# len("Content-Encoding: gzip\r\n"), but a bigger value could reflect that a
+# non-trivial improvement in transfer time is required to make up for the time
 # required for decompression. An improvement of a few bytes is unlikely to
 # actually reduce the network communication in terms of MTUs.
 MIN_IMPROVEMENT = 100

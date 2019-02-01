@@ -15,13 +15,12 @@ projects such as `WhiteNoise`_.
 
 Most browsers now support Brotli compression (check support status on `Can I
 use... Brotli`_). The middleware will choose the best compression method
-supported by the client. In order of preference:
+supported by the client as indicated in the request's ``Accept-Encoding``
+header. In order of preference:
 
 - Brotli
 - gzip
 
-For example, Brotli is only used when the client has sent an ``Accept-Encoding``
-header containing ``br``.
 
 .. _`documentation`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.middleware.gzip
 .. _`WhiteNoise`: https://whitenoise.readthedocs.io/
@@ -62,7 +61,8 @@ Credits and Resources
 ---------------------
 
 The code and tests in this project are based on Django's ``GZipMiddleware`` and
-Vašek Dohnal's ``django-brotli``. For compression, it uses:
+Vašek Dohnal's ``django-brotli``. For compression, it uses the following modules
+to bind to fast C modules:
 
 - The `Brotli`_ bindings or `brotlipy`_. The latter is preferred on PyPy since
   it is implemented using cffi. But both should work on both Python
