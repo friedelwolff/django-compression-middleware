@@ -15,7 +15,7 @@
 __all__ = ['CompressionMiddleware']
 
 
-import brotli
+from .br import brotli_compress
 
 from django.middleware.gzip import compress_string as gzip_compress, compress_sequence
 from django.utils.cache import patch_vary_headers
@@ -43,10 +43,6 @@ MIN_LEN = 500
 # required for decompression. An improvement of a few bytes is unlikely to
 # actually reduce the network communication in terms of MTUs.
 MIN_IMPROVEMENT = 100
-
-
-def brotli_compress(content):
-    return brotli.compress(content, quality=4)
 
 
 # supported encodings in order of preference
