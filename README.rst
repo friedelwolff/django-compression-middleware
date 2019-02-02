@@ -22,6 +22,10 @@ header. In order of preference:
 - Brotli
 - gzip
 
+Summary of the project status:
+
+.. image:: https://travis-ci.org/friedelwolff/django-compression-middleware.svg?branch=master
+    :target: https://travis-ci.org/friedelwolff/django-compression-middleware
 
 .. _`documentation`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.middleware.gzip
 .. _`WhiteNoise`: https://whitenoise.readthedocs.io/
