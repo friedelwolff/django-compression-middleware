@@ -10,8 +10,9 @@ other compression methods. It is meant to be a drop-in replacement for Django's
 apply here as well.
 
 The middleware is focussed on the task of compressing typical Django responses
-such as HTML, JSON, etc.  For static file compression, have a look at other
-projects such as `WhiteNoise`_.
+such as HTML, JSON, etc.  Both normal (bulk) and streaming responses are
+supported. For static file compression, have a look at other projects such as
+`WhiteNoise`_.
 
 Most browsers now support Brotli compression (check support status on `Can I
 use... Brotli`_). The middleware will choose the best compression method
