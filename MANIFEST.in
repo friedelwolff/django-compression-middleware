@@ -1,5 +1,9 @@
 include LICENSE
 include README.rst
-recursive-include django_compression_middleware *.html *py
+include requirements*.txt
+include tox.ini
+include pytest.ini
+recursive-include compression_middleware *.html *py
+recursive-include tests *py
 global-exclude __pycache__
 global-exclude *.py[co]
