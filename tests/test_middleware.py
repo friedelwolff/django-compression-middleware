@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+# partially based on tests in django and django-brotli
+
 from io import BytesIO
 import gzip
 import random
@@ -23,14 +25,11 @@ from .utils import UTF8_LOREM_IPSUM_IN_CZECH
 class FakeRequestAcceptsBrotli(object):
     META = {
         'HTTP_ACCEPT_ENCODING': 'gzip, deflate, sdch, br'
-#         'HTTP_ACCEPT_ENCODING': 'br, gzip, deflate, sdch'
     }
 
 
 class FakeLegacyRequest(object):
     META = {
-#         'HTTP_ACCEPT_ENCODING': 'gzip, deflate, sdch'
-#         'HTTP_ACCEPT_ENCODING': ''
     }
 
 
@@ -88,7 +87,10 @@ class MiddlewareTestCase(TestCase):
         decompressed_response = brotli.decompress(response.content)  # type: bytes
         self.assertEqual(response_content, decompressed_response.decode(encoding='utf-8'))
 
-#         self.assertEqual(response['ETag'], '"foo;br\\"')
+        # note: this is where we differ from django-brotli
+        # django-brotli's expectation
+        ### self.assertEqual(response['ETag'], '"foo;br\\"')
+        # Djago's expectation
         self.assertEqual(response['ETag'], 'W/"foo"')
 
     def test_middleware_wont_compress_response_if_response_is_small(self):
