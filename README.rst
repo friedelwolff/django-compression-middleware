@@ -34,9 +34,12 @@ Summary of the project status:
 Installation
 ------------
 
-- Supported Python versions: 2.7, 3.4, 3.5, 3.6 and 3.7.
-  CPython and PyPy are supported.
-- Supported Django versions: 1.11 (LTS), 2.0, 2.1.
+The following requirements are supported and tested in all reasonable
+combinations:
+
+- Python versions: 2.7, 3.4, 3.5, 3.6, 3.7.
+- Interpreters: CPython and PyPy.
+- Django versions: 1.11 (LTS), 2.0, 2.1.
 
 .. code:: shell
 
@@ -49,11 +52,16 @@ Add ``compression_middleware.middleware.CompressionMiddleware`` to the
 .. code:: python
 
     MIDDLEWARE = [
+        # ...
         'compression_middleware.middleware.CompressionMiddleware',
         # ...
     ]
 
 Remove ``GZipMiddleware`` and ``BrotliMiddleware`` if you used it before.
+Consult the Django documentation on the correct `ordering of middleware`_.
+
+.. _`ordering of middleware`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.middleware.gzip
+
 
 Note that your browser might not send the ``br`` entry in the ``Accept-Encoding``
 header when you test without HTTPS (common on localhost). You can force it to
@@ -92,8 +100,9 @@ Contributing
 3. Install package dependencies: ``pip install --upgrade -r requirements_dev.txt``
 4. Change some code
 5. Run the tests: in the project root simply execute ``pytest``, and afterwards
-   preferably ``tox`` to test the full test matrix. If you don't have all the
-   Python interpreters, consider running ``tox --skip-missing-interpreters``.
+   preferably ``tox`` to test the full test matrix. Consider installing as many
+   supported interpreters as possible (having them in your ``PATH`` is often
+   sufficient).
 6. Submit a pull request and check for any errors reported by the Continuous
    Integration service.
 
