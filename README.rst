@@ -31,8 +31,8 @@ Summary of the project status:
 .. _`WhiteNoise`: https://whitenoise.readthedocs.io/
 .. _`Can I use... Brotli`: http://caniuse.com/#search=brotli
 
-Installation
-------------
+Installation and usage
+----------------------
 
 The following requirements are supported and tested in all reasonable
 combinations:
@@ -45,8 +45,8 @@ combinations:
 
     pip install --upgrade django-compression-middleware
 
-
-Add ``compression_middleware.middleware.CompressionMiddleware`` to the
+To apply compression to all the views served by Django, add
+``compression_middleware.middleware.CompressionMiddleware`` to the
 ``MIDDLEWARE`` setting:
 
 .. code:: python
@@ -62,6 +62,16 @@ Consult the Django documentation on the correct `ordering of middleware`_.
 
 .. _`ordering of middleware`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.middleware.gzip
 
+Alternatively you can decorate views individually to serve them with
+compression:
+
+.. code:: python
+
+    from compression_middleware.decorators import compress_page
+
+    @compress_page
+    def index_view(request):
+        ...
 
 Note that your browser might not send the ``br`` entry in the ``Accept-Encoding``
 header when you test without HTTPS (common on localhost). You can force it to
