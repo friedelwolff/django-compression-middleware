@@ -26,6 +26,9 @@ Summary of the project status:
 
 .. image:: https://travis-ci.org/friedelwolff/django-compression-middleware.svg?branch=master
     :target: https://travis-ci.org/friedelwolff/django-compression-middleware
+.. image:: https://img.shields.io/pypi/djversions/django-compression-middleware.svg
+.. image:: https://img.shields.io/pypi/pyversions/django-compression-middleware.svg
+.. image:: https://img.shields.io/pypi/implementation/django-compression-middleware.svg
 
 .. _`documentation`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.middleware.gzip
 .. _`WhiteNoise`: https://whitenoise.readthedocs.io/
