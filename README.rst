@@ -124,4 +124,4 @@ License
 
 The MPL 2.0 License
 
-Copyright (c) 2019 Friedel Wolff
+Copyright (c) 2019 `Friedel Wolff <https://fwolff.net.za/>`_.
