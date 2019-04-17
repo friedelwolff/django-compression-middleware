@@ -17,7 +17,7 @@ setup(
     version='0.2.1',
     description="""Django middleware to compress responses using several algorithms.""",
     long_description=io.open("README.rst", 'r', encoding="utf-8").read(),
-    url='https://github.com/friedelwolff/django-compresion-middleware',
+    url='https://github.com/friedelwolff/django-compression-middleware',
     author='Friedel Wolff',
     author_email='friedel@translate.org.za',
     packages=['compression_middleware'],
