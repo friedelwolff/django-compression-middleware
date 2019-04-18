@@ -88,9 +88,9 @@ class MiddlewareTestCase(TestCase):
         self.assertEqual(response_content, decompressed_response.decode(encoding='utf-8'))
 
         # note: this is where we differ from django-brotli
-        # django-brotli's expectation
+        # django-brotli's expectation:
         ### self.assertEqual(response['ETag'], '"foo;br\\"')
-        # Djago's expectation
+        # Django's expectation:
         self.assertEqual(response['ETag'], 'W/"foo"')
 
     def test_middleware_wont_compress_response_if_response_is_small(self):
