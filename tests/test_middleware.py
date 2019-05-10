@@ -72,6 +72,7 @@ class MiddlewareTestCase(TestCase):
 
         decompressed_response = brotli.decompress(response.content)  # type: bytes
         self.assertEqual(response_content, decompressed_response.decode(encoding='utf-8'))
+        self.assertEqual(response.get('Vary'), 'Accept-Encoding')
 
     def test_etag_is_updated_if_present(self):
         fake_request = FakeRequestAcceptsBrotli()
@@ -105,6 +106,7 @@ class MiddlewareTestCase(TestCase):
         response = compression_middleware.process_response(fake_request, fake_response)
 
         self.assertEqual(response_content, response.content.decode(encoding='utf-8'))
+        self.assertFalse(response.has_header('Vary'))
 
     def test_middleware_wont_compress_if_client_not_accept(self):
         fake_request = FakeLegacyRequest()
@@ -118,6 +120,7 @@ class MiddlewareTestCase(TestCase):
         gzip_response = django_gzip_middleware.process_response(fake_request, fake_response)
 
         self.assertEqual(response_content, response.content.decode(encoding='utf-8'))
+        self.assertEqual(response.get('Vary'), 'Accept-Encoding')
 
     def test_middleware_wont_compress_if_response_is_already_compressed(self):
         fake_request = FakeRequestAcceptsBrotli()
@@ -131,6 +134,7 @@ class MiddlewareTestCase(TestCase):
         response = compression_middleware.process_response(fake_request, gzip_response)
 
         self.assertEqual(response_content, gzip_decompress(response.content).decode(encoding='utf-8'))
+        self.assertEqual(response.get('Vary'), 'Accept-Encoding')
 
 
     def test_content_encoding_parsing(self):
@@ -176,6 +180,7 @@ class StreamingTest(SimpleTestCase):
         self.assertEqual(brotli.decompress(b''.join(r)), b''.join(self.sequence))
         self.assertEqual(r.get('Content-Encoding'), 'br')
         self.assertFalse(r.has_header('Content-Length'))
+        self.assertEqual(r.get('Vary'), 'Accept-Encoding')
 
     def test_compress_streaming_response_unicode(self):
         """
@@ -188,3 +193,4 @@ class StreamingTest(SimpleTestCase):
         )
         self.assertEqual(r.get('Content-Encoding'), 'br')
         self.assertFalse(r.has_header('Content-Length'))
+        self.assertEqual(r.get('Vary'), 'Accept-Encoding')
