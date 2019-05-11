@@ -5,7 +5,7 @@ import io
 from platform import python_implementation
 from setuptools import setup
 
-install_requires = ['django']
+install_requires = ['django', 'zstandard']
 if python_implementation() == 'PyPy':
     install_requires.append('brotlipy')
 else:

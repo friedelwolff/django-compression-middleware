@@ -2,4 +2,5 @@
 
 brotlipy>=0.7.0 ; platform_python_implementation == 'PyPy'
 Brotli ; platform_python_implementation != 'PyPy'
+zstandard
 Django>=1.11.0

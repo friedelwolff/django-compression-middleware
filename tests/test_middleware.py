@@ -8,6 +8,7 @@ import random
 from unittest import TestCase
 
 import brotli
+import zstandard as zstd
 
 from django.http import (
     FileResponse, HttpResponse,
@@ -20,6 +21,12 @@ from django.utils import six
 
 from compression_middleware.middleware import CompressionMiddleware, compressor
 from .utils import UTF8_LOREM_IPSUM_IN_CZECH
+
+
+class FakeRequestAcceptsZstd(object):
+    META = {
+        'HTTP_ACCEPT_ENCODING': 'gzip, deflate, sdch, br, zstd'
+    }
 
 
 class FakeRequestAcceptsBrotli(object):
@@ -71,6 +78,19 @@ class MiddlewareTestCase(TestCase):
         response = compression_middleware.process_response(fake_request, fake_response)
 
         decompressed_response = brotli.decompress(response.content)  # type: bytes
+        self.assertEqual(response_content, decompressed_response.decode(encoding='utf-8'))
+        self.assertEqual(response.get('Vary'), 'Accept-Encoding')
+
+    def test_middleware_compress_response_zstsd(self):
+        fake_request = FakeRequestAcceptsZstd()
+        response_content = UTF8_LOREM_IPSUM_IN_CZECH
+        fake_response = FakeResponse(content=response_content)
+
+        compression_middleware = CompressionMiddleware()
+        response = compression_middleware.process_response(fake_request, fake_response)
+
+        cctx = zstd.ZstdDecompressor()
+        decompressed_response = cctx.decompress(response.content)  # type: bytes
         self.assertEqual(response_content, decompressed_response.decode(encoding='utf-8'))
         self.assertEqual(response.get('Vary'), 'Accept-Encoding')
 
@@ -145,7 +165,7 @@ class MiddlewareTestCase(TestCase):
         self.assertEqual(compressor('br;q=1.0, gzip;q=0.8')[0], 'br')
         self.assertEqual(compressor('br;q=0, gzip;q=0.8')[0], 'gzip')
 #         self.assertEqual(compressor('br;q=0, gzip;q=0.8, *;q=0.1')[0], 'gzip')
-        self.assertEqual(compressor('*')[0], 'br')
+        self.assertEqual(compressor('*')[0], 'zstd')
 
 
 class StreamingTest(SimpleTestCase):

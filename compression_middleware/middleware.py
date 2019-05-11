@@ -16,6 +16,7 @@ __all__ = ['CompressionMiddleware']
 
 
 from .br import brotli_compress, brotli_compress_stream
+from .zstd import zstd_compress, zstd_compress_stream
 
 from django.middleware.gzip import (
         compress_string as gzip_compress,
@@ -51,6 +52,7 @@ MIN_IMPROVEMENT = 100
 # supported encodings in order of preference
 # (encoding, bulk_compressor, stream_compressor)
 compressors = (
+        ('zstd', zstd_compress, zstd_compress_stream),
         ('br', brotli_compress, brotli_compress_stream),
         ('gzip', gzip_compress, gzip_compress_stream),
 )
