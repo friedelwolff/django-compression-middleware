@@ -14,7 +14,7 @@ else:
 
 setup(
     name='django-compression-middleware',
-    version='0.2.1',
+    version='0.3.0',
     description="""Django middleware to compress responses using several algorithms.""",
     long_description=io.open("README.rst", 'r', encoding="utf-8").read(),
     url='https://github.com/friedelwolff/django-compression-middleware',
