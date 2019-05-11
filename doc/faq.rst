@@ -44,7 +44,7 @@ Questions
 - What about compression with the SDCH algorithm? (Or bzip2, lma, xz...)
 
   These are not in IANA's `content coding registry`_ and are not widely
-  supported by clients.
+  supported by clients. Zstandard is supported, though.
 
 .. _content coding registry: https://www.iana.org/assignments/http-parameters/http-parameters.xhtml#content-coding
 

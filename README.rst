@@ -14,11 +14,13 @@ such as HTML, JSON, etc.  Both normal (bulk) and streaming responses are
 supported. For static file compression, have a look at other projects such as
 `WhiteNoise`_.
 
+Zstandard is a new method for compression with little client support so far.
 Most browsers now support Brotli compression (check support status on `Can I
 use... Brotli`_). The middleware will choose the best compression method
 supported by the client as indicated in the request's ``Accept-Encoding``
 header. In order of preference:
 
+- Zstandard
 - Brotli
 - gzip
 
@@ -90,11 +92,14 @@ The code and tests in this project are based on Django's ``GZipMiddleware`` and
 Vašek Dohnal's ``django-brotli``. For compression, it uses the following modules
 to bind to fast C modules:
 
+- The `zstandard`_ bindings. It supports both a C module (for CPython) and CFFI
+  which should be appropriate for PyPy. See the documentation for full details.
 - The `Brotli`_ bindings or `brotlipy`_. The latter is preferred on PyPy since
   it is implemented using cffi. But both should work on both Python
   implementations.
 - Python's builtin `gzip`_ module.
 
+.. _zstandard: https://pypi.org/project/zstandard/
 .. _Brotli: https://pypi.org/project/Brotli/
 .. _brotlipy: https://pypi.org/project/brotlipy/
 .. _gzip: https://docs.python.org/3/library/gzip.html
@@ -102,6 +107,7 @@ to bind to fast C modules:
 Further readding on Wikipedia:
 
 - `HTTP compression <https://en.wikipedia.org/wiki/HTTP_compression>`__
+- `Zstandard http://www.zstd.net/`__
 - `Brotli <https://en.wikipedia.org/wiki/Brotli>`__
 - `gzip <https://en.wikipedia.org/wiki/Gzip>`__
 
