@@ -107,7 +107,7 @@ to bind to fast C modules:
 Further readding on Wikipedia:
 
 - `HTTP compression <https://en.wikipedia.org/wiki/HTTP_compression>`__
-- `Zstandard http://www.zstd.net/`__
+- `Zstandard <http://www.zstd.net/>`__
 - `Brotli <https://en.wikipedia.org/wiki/Brotli>`__
 - `gzip <https://en.wikipedia.org/wiki/Gzip>`__
 
