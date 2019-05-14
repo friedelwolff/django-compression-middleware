@@ -81,7 +81,7 @@ class MiddlewareTestCase(TestCase):
         self.assertEqual(response_content, decompressed_response.decode(encoding='utf-8'))
         self.assertEqual(response.get('Vary'), 'Accept-Encoding')
 
-    def test_middleware_compress_response_zstsd(self):
+    def test_middleware_compress_response_zstd(self):
         fake_request = FakeRequestAcceptsZstd()
         response_content = UTF8_LOREM_IPSUM_IN_CZECH
         fake_response = FakeResponse(content=response_content)
