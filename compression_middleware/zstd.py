@@ -28,5 +28,5 @@ def zstd_compress_stream(sequence):
         for item in sequence:
             if compressor.write(item):
                 yield buf.read()
-        compressor.flush()
+        compressor.flush(zstd.FLUSH_FRAME)
         yield buf.read()
