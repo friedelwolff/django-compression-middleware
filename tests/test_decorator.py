@@ -6,7 +6,8 @@ import brotli
 from django.http import HttpRequest, HttpResponse, StreamingHttpResponse
 from django.test import RequestFactory, SimpleTestCase, TestCase
 
-from compression_middleware.decorators import compress_page
+from compression_middleware.decorators import compress_page, compress_exempt
+from compression_middleware.middleware import MIN_LEN
 
 
 class CompressPageDecoratorTest(SimpleTestCase):
@@ -48,6 +49,16 @@ class CompressPageDecoratorTest(SimpleTestCase):
         self.assertEqual(r.get('Content-Encoding'), 'br')
         self.assertEqual(r.get('Content-Length'), str(len(r.content)))
         self.assertTrue(brotli.decompress(r.content), self.compressible_string)
+
+    def test_exempt_page(self):
+
+        @compress_exempt
+        def exempt_view(request):
+            return self.resp
+
+        r = exempt_view(self.req)
+        self.assertFalse(r.has_header('Content-Encoding'))
+        self.assertEqual(r.content, self.resp.content)
 
     def test_streaming_page(self):
         @compress_page
