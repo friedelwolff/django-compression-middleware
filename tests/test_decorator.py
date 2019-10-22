@@ -3,11 +3,10 @@ from __future__ import unicode_literals
 
 import brotli
 
-from django.http import HttpRequest, HttpResponse, StreamingHttpResponse
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.http import HttpResponse, StreamingHttpResponse
+from django.test import RequestFactory, SimpleTestCase
 
 from compression_middleware.decorators import compress_page, compress_exempt
-from compression_middleware.middleware import MIN_LEN
 
 
 class CompressPageDecoratorTest(SimpleTestCase):
