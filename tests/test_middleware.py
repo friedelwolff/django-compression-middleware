@@ -17,7 +17,14 @@ from django.http import (
 
 from django.middleware.gzip import GZipMiddleware
 from django.test import RequestFactory, SimpleTestCase
-from django.utils import six
+try:
+    # Python 2
+    range = xrange
+    int2byte = chr
+except NameError:
+    # Python 3
+    import struct
+    int2byte = struct.Struct(">B").pack
 
 from compression_middleware.middleware import CompressionMiddleware, compressor
 from .utils import UTF8_LOREM_IPSUM_IN_CZECH
@@ -174,7 +181,7 @@ class StreamingTest(SimpleTestCase):
     """
     short_string = b"This string is too short to be worth compressing."
     compressible_string = b'a' * 500
-    incompressible_string = b''.join(six.int2byte(random.randint(0, 255)) for _ in range(500))
+    incompressible_string = b''.join(int2byte(random.randint(0, 255)) for _ in range(500))
     sequence = [b'a' * 500, b'b' * 200, b'a' * 300]
     sequence_unicode = [u'a' * 500, u'é' * 200, u'a' * 300]
     request_factory = RequestFactory()
