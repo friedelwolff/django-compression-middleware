@@ -54,6 +54,8 @@ matrix:
           env: DJANGO_VERSION=2.1
         - python: "pypy3.5"
           env: DJANGO_VERSION=1.11
+        - python: "pypy3.5"
+          env: DJANGO_VERSION=3.0
 
 # command to install dependencies
 install:
