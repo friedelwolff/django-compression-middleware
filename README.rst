@@ -44,7 +44,7 @@ combinations:
 
 - Python versions: 2.7, 3.4, 3.5, 3.6, 3.7, 3.8.
 - Interpreters: CPython and PyPy.
-- Django versions: 1.11 (LTS), 2.0, 2.1, 2.2 (LTS).
+- Django versions: 1.11 (LTS), 2.0, 2.1, 2.2 (LTS), 3.0.
 
 .. code:: shell
 
