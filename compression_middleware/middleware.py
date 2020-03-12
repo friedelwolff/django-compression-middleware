@@ -95,9 +95,11 @@ class CompressionMiddleware(MiddlewareMixin):
         # Test a few things before we even try:
         #  - content is already encoded
         #  - really short responses are not worth it
-        if \
-                response.has_header('Content-Encoding') or \
-                (not response.streaming and len(response.content) < MIN_LEN):
+        if (
+            response.has_header('Content-Encoding') or
+            (not response.streaming and len(response.content) < MIN_LEN) or
+            getattr(request, "compress_exempt", False) is True
+        ):
             return response
 
         patch_vary_headers(response, ('Accept-Encoding',))
