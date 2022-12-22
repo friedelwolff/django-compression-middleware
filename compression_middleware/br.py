@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-__all__ = ['brotli_compress', 'brotli_compress_stream']
+__all__ = ["brotli_compress", "brotli_compress_stream"]
 
 
 from brotli import compress, Compressor
@@ -18,7 +18,7 @@ def brotli_compress(content):
 
 
 def brotli_compress_stream(sequence):
-    yield b''
+    yield b""
 
     compressor = Compressor(quality=DEFAULT_LEVEL)
     try:

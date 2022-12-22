@@ -12,7 +12,7 @@
 #        - MIT Licence
 
 
-__all__ = ['CompressionMiddleware']
+__all__ = ["CompressionMiddleware"]
 
 
 from .br import brotli_compress, brotli_compress_stream
@@ -52,9 +52,9 @@ MIN_IMPROVEMENT = 100
 # supported encodings in order of preference
 # (encoding, bulk_compressor, stream_compressor)
 compressors = (
-        ('zstd', zstd_compress, zstd_compress_stream),
-        ('br', brotli_compress, brotli_compress_stream),
-        ('gzip', gzip_compress, gzip_compress_stream),
+        ("zstd", zstd_compress, zstd_compress_stream),
+        ("br", brotli_compress, brotli_compress_stream),
+        ("gzip", gzip_compress, gzip_compress_stream),
 )
 
 
@@ -63,10 +63,10 @@ def encoding_name(s):
     # We won't break if the ordering is specified with q=, but we ignore it.
     # Only a quality level of 0 is honoured -- in such a case we handle it as
     # if the encoding wasn't specified at all.
-    if ';' in s:
-        s, q = s.split(';')
-        if '=' in q:
-            _, q = q.split('=')
+    if ";" in s:
+        s, q = s.split(";")
+        if "=" in q:
+            _, q = q.split("=")
             if float(q) == 0.0:
                 return None
     return s.strip()
@@ -75,7 +75,7 @@ def encoding_name(s):
 def compressor(accept_encoding):
     # We don't want to process extremely long headers. It might be an attack:
     accept_encoding = accept_encoding[:200]
-    client_encodings = set(encoding_name(e) for e in accept_encoding.split(','))
+    client_encodings = set(encoding_name(e) for e in accept_encoding.split(","))
     if "*" in client_encodings:
         # Our first choice:
         return compressors[0]
@@ -91,17 +91,18 @@ class CompressionMiddleware(MiddlewareMixin):
 
     The Vary header is set for the sake of downstream caches.
     """
+
     def process_response(self, request, response):
         # Test a few things before we even try:
         #  - content is already encoded
         #  - really short responses are not worth it
-        if \
-                response.has_header('Content-Encoding') or \
-                (not response.streaming and len(response.content) < MIN_LEN):
+        if response.has_header("Content-Encoding") or (
+            not response.streaming and len(response.content) < MIN_LEN
+        ):
             return response
 
-        patch_vary_headers(response, ('Accept-Encoding',))
-        ae = request.META.get('HTTP_ACCEPT_ENCODING', '')
+        patch_vary_headers(response, ("Accept-Encoding",))
+        ae = request.META.get("HTTP_ACCEPT_ENCODING", "")
         encoding, compress_func, stream_func = compressor(ae)
         if not encoding:
             # No compression in common with client (the client probably didn't
@@ -112,23 +113,24 @@ class CompressionMiddleware(MiddlewareMixin):
             # Delete the `Content-Length` header for streaming content, because
             # we won't know the compressed size until we stream it.
             response.streaming_content = stream_func(response.streaming_content)
-            del response['Content-Length']
+            del response["Content-Length"]
         else:
+            #TODO: protect against excessive response size
             compressed_content = compress_func(response.content)
             # Return the compressed content only if compression is worth it
             if len(compressed_content) >= len(response.content) - MIN_IMPROVEMENT:
                 return response
 
             response.content = compressed_content
-            response['Content-Length'] = str(len(response.content))
+            response["Content-Length"] = str(len(response.content))
 
         # If there is a strong ETag, make it weak to fulfill the requirements
         # of RFC 7232 section-2.1 while also allowing conditional request
         # matches on ETags.
         # Django's ConditionalGetMiddleware relies upon this etag behaviour.
-        etag = response.get('ETag')
+        etag = response.get("ETag")
         if etag and etag.startswith('"'):
-            response['ETag'] = 'W/' + etag
-        response['Content-Encoding'] = encoding
+            response["ETag"] = "W/" + etag
+        response["Content-Encoding"] = encoding
 
         return response

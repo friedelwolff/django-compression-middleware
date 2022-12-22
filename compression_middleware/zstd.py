@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-__all__ = ['zstd_compress', 'zstd_compress_stream']
+__all__ = ["zstd_compress", "zstd_compress_stream"]
 
 
 from django.utils.text import StreamingBuffer
