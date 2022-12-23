@@ -81,7 +81,7 @@ class MiddlewareTestCase(TestCase):
         response_content = UTF8_LOREM_IPSUM_IN_CZECH
         fake_response = FakeResponse(content=response_content)
 
-        compression_middleware = CompressionMiddleware()
+        compression_middleware = CompressionMiddleware(lambda: fake_response)
         response = compression_middleware.process_response(
             fake_request, fake_response
         )
@@ -97,7 +97,7 @@ class MiddlewareTestCase(TestCase):
         response_content = UTF8_LOREM_IPSUM_IN_CZECH
         fake_response = FakeResponse(content=response_content)
 
-        compression_middleware = CompressionMiddleware()
+        compression_middleware = CompressionMiddleware(lambda: fake_response)
         response = compression_middleware.process_response(
             fake_request, fake_response
         )
@@ -119,7 +119,7 @@ class MiddlewareTestCase(TestCase):
 
         self.assertEqual(fake_response["ETag"], fake_etag_content)
 
-        compression_middleware = CompressionMiddleware()
+        compression_middleware = CompressionMiddleware(lambda: fake_response)
         response = compression_middleware.process_response(
             fake_request, fake_response
         )
@@ -141,7 +141,7 @@ class MiddlewareTestCase(TestCase):
 
         fake_response = FakeResponse(content=response_content)
 
-        compression_middleware = CompressionMiddleware()
+        compression_middleware = CompressionMiddleware(lambda: fake_response)
         response = compression_middleware.process_response(
             fake_request, fake_response
         )
@@ -156,12 +156,12 @@ class MiddlewareTestCase(TestCase):
         response_content = UTF8_LOREM_IPSUM_IN_CZECH
         fake_response = FakeResponse(content=response_content)
 
-        compression_middleware = CompressionMiddleware()
+        compression_middleware = CompressionMiddleware(lambda: fake_response)
         response = compression_middleware.process_response(
             fake_request, fake_response
         )
 
-        django_gzip_middleware = GZipMiddleware()
+        django_gzip_middleware = GZipMiddleware(lambda: fake_response)
         gzip_response = django_gzip_middleware.process_response(
             fake_request, fake_response
         )
@@ -176,8 +176,8 @@ class MiddlewareTestCase(TestCase):
         response_content = UTF8_LOREM_IPSUM_IN_CZECH
         fake_response = FakeResponse(content=response_content)
 
-        compression_middleware = CompressionMiddleware()
-        django_gzip_middleware = GZipMiddleware()
+        compression_middleware = CompressionMiddleware(lambda: fake_response)
+        django_gzip_middleware = GZipMiddleware(lambda: fake_response)
 
         gzip_response = django_gzip_middleware.process_response(
             fake_request, fake_response
@@ -236,7 +236,7 @@ class StreamingTest(SimpleTestCase):
         """
         Compression is performed on responses with streaming content.
         """
-        r = CompressionMiddleware().process_response(self.req, self.stream_resp)
+        r = CompressionMiddleware(lambda: self.stream_resp).process_response(self.req, self.stream_resp)
         self.assertEqual(brotli.decompress(b"".join(r)), b"".join(self.sequence))
         self.assertEqual(r.get("Content-Encoding"), "br")
         self.assertFalse(r.has_header("Content-Length"))
@@ -246,7 +246,7 @@ class StreamingTest(SimpleTestCase):
         """
         Compression is performed on responses with streaming Unicode content.
         """
-        r = CompressionMiddleware().process_response(
+        r = CompressionMiddleware(lambda: self.stream_resp_unicode).process_response(
             self.req, self.stream_resp_unicode
         )
         self.assertEqual(
