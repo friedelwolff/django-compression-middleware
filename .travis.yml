@@ -11,6 +11,9 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
+  - "3.9"
+  - "3.10"
+  - "3.11"
   - "pypy"   # 2.7
   - "pypy3.5"
   - "pypy3"  # 3.6
@@ -21,6 +24,10 @@ env:
   - DJANGO_VERSION=2.1
   - DJANGO_VERSION=2.2
   - DJANGO_VERSION=3.0
+  - DJANGO_VERSION=3.1
+  - DJANGO_VERSION=3.2
+  - DJANGO_VERSION=4.0
+  - DJANGO_VERSION=4.1
 
 matrix:
     exclude:
@@ -32,6 +39,14 @@ matrix:
           env: DJANGO_VERSION=2.2
         - python: "2.7"
           env: DJANGO_VERSION=3.0
+        - python: "2.7"
+          env: DJANGO_VERSION=3.1
+        - python: "2.7"
+          env: DJANGO_VERSION=3.2
+        - python: "2.7"
+          env: DJANGO_VERSION=4.0
+        - python: "2.7"
+          env: DJANGO_VERSION=4.1
         - python: "pypy"
           env: DJANGO_VERSION=2.0
         - python: "pypy"
@@ -40,6 +55,14 @@ matrix:
           env: DJANGO_VERSION=2.2
         - python: "pypy"
           env: DJANGO_VERSION=3.0
+        - python: "pypy"
+          env: DJANGO_VERSION=3.1
+        - python: "pypy"
+          env: DJANGO_VERSION=3.2
+        - python: "pypy"
+          env: DJANGO_VERSION=4.0
+        - python: "pypy"
+          env: DJANGO_VERSION=4.1
         - python: "3.4"
           env: DJANGO_VERSION=1.11
         - python: "3.4"
@@ -52,10 +75,26 @@ matrix:
           env: DJANGO_VERSION=1.11
         - python: "3.5"
           env: DJANGO_VERSION=3.0
+        - python: "3.5"
+          env: DJANGO_VERSION=3.1
+        - python: "3.5"
+          env: DJANGO_VERSION=3.2
+        - python: "3.5"
+          env: DJANGO_VERSION=4.0
+        - python: "3.5"
+          env: DJANGO_VERSION=4.1
         - python: "3.6"
           env: DJANGO_VERSION=1.11
+        - python: "3.6"
+          env: DJANGO_VERSION=4.0
+        - python: "3.6"
+          env: DJANGO_VERSION=4.1
         - python: "3.7"
           env: DJANGO_VERSION=1.11
+        - python: "3.7"
+          env: DJANGO_VERSION=4.0
+        - python: "3.7"
+          env: DJANGO_VERSION=4.1
         - python: "3.8"
           env: DJANGO_VERSION=1.11
         - python: "3.8"
@@ -66,8 +105,20 @@ matrix:
           env: DJANGO_VERSION=1.11
         - python: "pypy3.5"
           env: DJANGO_VERSION=3.0
+        - python: "pypy3.5"
+          env: DJANGO_VERSION=3.1
+        - python: "pypy3.5"
+          env: DJANGO_VERSION=3.2
+        - python: "pypy3.5"
+          env: DJANGO_VERSION=4.0
+        - python: "pypy3.5"
+          env: DJANGO_VERSION=4.1
         - python: "pypy3"
           env: DJANGO_VERSION=1.11
+        - python: "pypy3"
+          env: DJANGO_VERSION=4.0
+        - python: "pypy3"
+          env: DJANGO_VERSION=4.1
 
 # command to install dependencies
 install:

@@ -42,9 +42,11 @@ Installation and usage
 The following requirements are supported and tested in all reasonable
 combinations:
 
-- Python versions: 2.7, 3.4, 3.5, 3.6, 3.7, 3.8.
+- Python versions: 2.7, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11
+- Python versions: 2.7, 3.4–3.11
 - Interpreters: CPython and PyPy.
-- Django versions: 1.11 (LTS), 2.0, 2.1, 2.2 (LTS), 3.0.
+- Django versions: 1.11 (LTS), 2.0, 2.1, 2.2 (LTS), 3.0, 3.1, 3.2, 4.0, 4.1
+- Django versions: 1.11–4.1
 
 .. code:: shell
 
@@ -130,4 +132,4 @@ License
 
 The MPL 2.0 License
 
-Copyright (c) 2019 `Friedel Wolff <https://fwolff.net.za/>`_.
+Copyright (c) 2019-2023 `Friedel Wolff <https://fwolff.net.za/>`_.
