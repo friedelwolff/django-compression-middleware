@@ -5,10 +5,10 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
-        python: ["2.7", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9", "3.10", pypy-2.7, pypy-3.5, pypy-3.6, pypy-3.7, pypy-3.8, pypy-3.9]
+        python: ["2.7", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9", "3.10", pypy-2.7, pypy-3.6, pypy-3.7, pypy-3.8, pypy-3.9]
 
 
     steps:
