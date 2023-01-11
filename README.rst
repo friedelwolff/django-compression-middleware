@@ -20,9 +20,9 @@ use... Brotli`_). The middleware will choose the best compression method
 supported by the client as indicated in the request's ``Accept-Encoding``
 header. In order of preference:
 
-- Zstandard
-- Brotli
-- gzip
+- Zstandard (zstd)
+- Brotli (br)
+- gzip (gzip)
 
 Summary of the project status:
 
@@ -42,10 +42,8 @@ Installation and usage
 The following requirements are supported and tested in all reasonable
 combinations:
 
-- Python versions: 2.7, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11
 - Python versions: 2.7, 3.4–3.11
 - Interpreters: CPython and PyPy.
-- Django versions: 1.11 (LTS), 2.0, 2.1, 2.2 (LTS), 3.0, 3.1, 3.2, 4.0, 4.1
 - Django versions: 1.11–4.1
 
 .. code:: shell
