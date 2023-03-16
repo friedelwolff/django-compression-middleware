@@ -67,8 +67,12 @@ def encoding_name(s):
         s, q = s.split(";")
         if "=" in q:
             _, q = q.split("=")
-            if float(q) == 0.0:
-                return None
+            try:
+                q = float(q)
+                if q == 0.0:
+                    return None
+            except ValueError:
+                pass
     return s.strip()
 
 

@@ -42,6 +42,12 @@ class FakeRequestAcceptsBrotli(object):
     }
 
 
+class InvalidAcceptEcondingRequest(object):
+    META = {
+        "HTTP_ACCEPT_ENCODING": "text/plain,*/*; charset=utf-8"
+    }
+
+
 class FakeLegacyRequest(object):
     META = {
     }
@@ -168,6 +174,33 @@ class MiddlewareTestCase(TestCase):
 
         self.assertEqual(
             response_content, response.content.decode(encoding="utf-8")
+        )
+        self.assertEqual(response.get("Vary"), "Accept-Encoding")
+
+    def test_middleware_wont_compress_if_invalid_header(self):
+        """
+        Test that the middleware doesn't crash if the client sends an invalid
+        Accept-Encoding header.
+        """
+        fake_request = InvalidAcceptEcondingRequest()
+        response_content = UTF8_LOREM_IPSUM_IN_CZECH
+        fake_response = FakeResponse(content=response_content)
+
+        compression_middleware = CompressionMiddleware(lambda: fake_response)
+        response = compression_middleware.process_response(
+            fake_request, fake_response
+        )
+
+        django_gzip_middleware = GZipMiddleware(lambda: fake_response)
+        gzip_response = django_gzip_middleware.process_response(
+            fake_request, fake_response
+        )
+
+        self.assertEqual(
+            response_content, response.content.decode(encoding="utf-8")
+        )
+        self.assertEqual(
+            gzip_response.content.decode(encoding="utf-8"), response.content.decode(encoding="utf-8")
         )
         self.assertEqual(response.get("Vary"), "Accept-Encoding")
 
