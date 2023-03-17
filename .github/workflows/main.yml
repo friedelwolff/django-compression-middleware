@@ -1,6 +1,8 @@
 name: Django compression middleware
 
-on: [push]
+on:
+  - push
+  - pull_request
 
 jobs:
   build:
