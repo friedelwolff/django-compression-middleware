@@ -156,6 +156,7 @@ class MiddlewareTestCase(TestCase):
             response_content, response.content.decode(encoding="utf-8")
         )
         self.assertFalse(response.has_header("Vary"))
+        self.assertEqual(response.get("Content-Encoding"), None)
 
     def test_middleware_wont_compress_if_client_not_accept(self):
         fake_request = FakeLegacyRequest()
@@ -176,6 +177,7 @@ class MiddlewareTestCase(TestCase):
             response_content, response.content.decode(encoding="utf-8")
         )
         self.assertEqual(response.get("Vary"), "Accept-Encoding")
+        self.assertEqual(response.get("Content-Encoding"), None)
 
     def test_middleware_wont_compress_if_invalid_header(self):
         """
@@ -203,6 +205,7 @@ class MiddlewareTestCase(TestCase):
             gzip_response.content.decode(encoding="utf-8"), response.content.decode(encoding="utf-8")
         )
         self.assertEqual(response.get("Vary"), "Accept-Encoding")
+        self.assertEqual(response.get("Content-Encoding"), None)
 
     def test_middleware_wont_compress_if_response_is_already_compressed(self):
         fake_request = FakeRequestAcceptsBrotli()
