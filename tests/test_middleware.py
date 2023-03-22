@@ -237,6 +237,10 @@ class MiddlewareTestCase(TestCase):
         self.assertEqual(compressor("gzip, br")[0], "br")
         self.assertEqual(compressor("br;q=1.0, gzip;q=0.8")[0], "br")
         self.assertEqual(compressor("br;q=0, gzip;q=0.8")[0], "gzip")
+        self.assertEqual(compressor("bla;bla;gzip")[0], None)
+        self.assertEqual(compressor("text/plain,*/*; charset=utf-8")[0], None)  # PR #12
+        self.assertEqual(compressor("gzip;q==1")[0], "gzip")  # questionable
+        self.assertEqual(compressor("br;gzip")[0], "br")  # questionable
 #         self.assertEqual(compressor("br;q=0, gzip;q=0.8, *;q=0.1")[0], "gzip")
         self.assertEqual(compressor("*")[0], "zstd")
 

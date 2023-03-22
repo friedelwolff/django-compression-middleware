@@ -64,9 +64,9 @@ def encoding_name(s):
     # Only a quality level of 0 is honoured -- in such a case we handle it as
     # if the encoding wasn't specified at all.
     if ";" in s:
-        s, q = s.split(";")
+        s, q = s.split(";", 1)
         if "=" in q:
-            _, q = q.split("=")
+            _, q = q.split("=", 1)
             try:
                 q = float(q)
                 if q == 0.0:
