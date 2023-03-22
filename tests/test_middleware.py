@@ -202,7 +202,8 @@ class MiddlewareTestCase(TestCase):
             response_content, response.content.decode(encoding="utf-8")
         )
         self.assertEqual(
-            gzip_response.content.decode(encoding="utf-8"), response.content.decode(encoding="utf-8")
+            gzip_response.content.decode(encoding="utf-8"),
+            response.content.decode(encoding="utf-8")
         )
         self.assertEqual(response.get("Vary"), "Accept-Encoding")
         self.assertEqual(response.get("Content-Encoding"), None)
