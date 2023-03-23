@@ -26,8 +26,8 @@ header. In order of preference:
 
 Summary of the project status:
 
-* .. image:: https://travis-ci.org/friedelwolff/django-compression-middleware.svg?branch=master
-     :target: https://travis-ci.org/friedelwolff/django-compression-middleware
+* .. image:: https://img.shields.io/github/actions/workflow/status/friedelwolff/django-compression-middleware/main.yml
+     :target: https://github.com/friedelwolff/django-compression-middleware/actions
 * .. image:: https://img.shields.io/pypi/djversions/django-compression-middleware.svg
 * .. image:: https://img.shields.io/pypi/pyversions/django-compression-middleware.svg
 * .. image:: https://img.shields.io/pypi/implementation/django-compression-middleware.svg
