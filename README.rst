@@ -65,7 +65,7 @@ To apply compression to all the views served by Django, add
 Remove ``GZipMiddleware`` and ``BrotliMiddleware`` if you used it before.
 Consult the Django documentation on the correct `ordering of middleware`_.
 
-.. _`ordering of middleware`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.middleware.gzip
+.. _`ordering of middleware`: https://docs.djangoproject.com/en/dev/ref/middleware/#middleware-ordering
 
 Alternatively you can decorate views individually to serve them with
 compression:
