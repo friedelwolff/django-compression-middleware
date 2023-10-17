@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -79,7 +78,7 @@ def encoding_name(s):
 def compressor(accept_encoding):
     # We don't want to process extremely long headers. It might be an attack:
     accept_encoding = accept_encoding[:200]
-    client_encodings = set(encoding_name(e) for e in accept_encoding.split(","))
+    client_encodings = {encoding_name(e) for e in accept_encoding.split(",")}
     if "*" in client_encodings:
         # Our first choice:
         return compressors[0]

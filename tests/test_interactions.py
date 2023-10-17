@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-
 # This tests if the middleware works as Django expects from its own
 # GZipMiddleware. This way we test the expected interactions with other parts
 # of Django, such as ConditionalGetMiddleware, which relies on certain parts
@@ -13,6 +9,7 @@ from __future__ import unicode_literals
 
 import gzip
 import random
+import struct
 from io import BytesIO
 
 from django.http import (
@@ -24,15 +21,7 @@ from compression_middleware.middleware import CompressionMiddleware as GZipMiddl
 from django.middleware.http import ConditionalGetMiddleware
 from django.test import RequestFactory, SimpleTestCase, override_settings
 
-try:
-    # Python 2
-    range = xrange
-    int2byte = chr
-except NameError:
-    # Python 3
-    import struct
-
-    int2byte = struct.Struct(">B").pack
+int2byte = struct.Struct(">B").pack
 
 
 class GZipMiddlewareTest(SimpleTestCase):
