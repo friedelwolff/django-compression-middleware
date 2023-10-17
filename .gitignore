@@ -28,3 +28,6 @@ htmlcov
 *.log
 *.bak
 *.backup
+
+# Environments
+.venv
