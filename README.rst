@@ -42,9 +42,9 @@ Installation and usage
 The following requirements are supported and tested in all reasonable
 combinations:
 
-- Python versions: 3.6–3.12
+- Python versions: 3.8–3.12
 - Interpreters: CPython and PyPy.
-- Django versions: 1.11–5.0
+- Django versions: 3.2–5.0
 
 .. code:: shell
 
