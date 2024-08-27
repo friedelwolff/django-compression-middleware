@@ -1,11 +1,10 @@
-# -*- encoding: utf-8 -*-
-
 # partially based on tests in django and django-brotli
 
 from io import BytesIO
 import gzip
 import random
 from unittest import TestCase
+import struct
 
 import brotli
 import zstandard as zstd
@@ -17,38 +16,31 @@ from django.http import (
 
 from django.middleware.gzip import GZipMiddleware
 from django.test import RequestFactory, SimpleTestCase
-try:
-    # Python 2
-    range = xrange
-    int2byte = chr
-except NameError:
-    # Python 3
-    import struct
-    int2byte = struct.Struct(">B").pack
 
 from compression_middleware.middleware import CompressionMiddleware, compressor
 from .utils import UTF8_LOREM_IPSUM_IN_CZECH
 
+int2byte = struct.Struct(">B").pack
 
-class FakeRequestAcceptsZstd(object):
+class FakeRequestAcceptsZstd:
     META = {
         "HTTP_ACCEPT_ENCODING": "gzip, deflate, sdch, br, zstd"
     }
 
 
-class FakeRequestAcceptsBrotli(object):
+class FakeRequestAcceptsBrotli:
     META = {
         "HTTP_ACCEPT_ENCODING": "gzip, deflate, sdch, br"
     }
 
 
-class InvalidAcceptEcondingRequest(object):
+class InvalidAcceptEcondingRequest:
     META = {
         "HTTP_ACCEPT_ENCODING": "text/plain,*/*; charset=utf-8"
     }
 
 
-class FakeLegacyRequest(object):
+class FakeLegacyRequest:
     META = {
     }
 
@@ -58,7 +50,7 @@ def gzip_decompress(gzipped_string):
         return f.read()
 
 
-class FakeResponse(object):
+class FakeResponse:
     streaming = False
 
     def __init__(self, content, headers=None, streaming=None):
@@ -255,7 +247,7 @@ class StreamingTest(SimpleTestCase):
         int2byte(random.randint(0, 255)) for _ in range(500)
     )
     sequence = [b"a" * 500, b"b" * 200, b"a" * 300]
-    sequence_unicode = [u"a" * 500, u"é" * 200, u"a" * 300]
+    sequence_unicode = ["a" * 500, "é" * 200, "a" * 300]
     request_factory = RequestFactory()
 
     def setUp(self):
