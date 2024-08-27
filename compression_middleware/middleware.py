@@ -18,7 +18,7 @@ __all__ = ["CompressionMiddleware"]
 from .br import brotli_compress, brotli_compress_stream
 from .zstd import zstd_compress, zstd_compress_stream
 
-from django.middleware.gzip import (
+from django.utils.text import (
         compress_string as gzip_compress,
         compress_sequence as gzip_compress_stream,
 )
