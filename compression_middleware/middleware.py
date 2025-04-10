@@ -15,18 +15,17 @@
 __all__ = ["CompressionMiddleware"]
 
 
+from django import VERSION as django_version
+from django.middleware.gzip import compress_sequence as gzip_compress_stream
+from django.middleware.gzip import compress_string as gzip_compress
+from django.utils.cache import patch_vary_headers
+
 from .br import brotli_compress, brotli_compress_stream
 from .zstd import zstd_compress, zstd_compress_stream
 
-from django.utils.text import (
-        compress_string as gzip_compress,
-        compress_sequence as gzip_compress_stream,
-)
-from django.utils.cache import patch_vary_headers
-
 try:
     from django.utils.deprecation import MiddlewareMixin
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     MiddlewareMixin = object
 
 
@@ -52,9 +51,9 @@ MIN_IMPROVEMENT = 100
 # supported encodings in order of preference
 # (encoding, bulk_compressor, stream_compressor)
 compressors = (
-        ("zstd", zstd_compress, zstd_compress_stream),
-        ("br", brotli_compress, brotli_compress_stream),
-        ("gzip", gzip_compress, gzip_compress_stream),
+    ("zstd", zstd_compress, zstd_compress_stream),
+    ("br", brotli_compress, brotli_compress_stream),
+    ("gzip", gzip_compress, gzip_compress_stream),
 )
 
 
@@ -83,58 +82,84 @@ def compressor(accept_encoding):
     if "*" in client_encodings:
         # Our first choice:
         return compressors[0]
-    for encoding, compress_func, stream_func in compressors:
-        if encoding in client_encodings:
-            return (encoding, compress_func, stream_func)
+    for compressor in compressors:
+        if compressor[0] in client_encodings:
+            return compressor
     return (None, None, None)
 
 
 class CompressionMiddleware(MiddlewareMixin):
     """
-    This middleware compresses content based on the Accept-Encoding header.
-
-    The Vary header is set for the sake of downstream caches.
+    Compress content based on the Accept-Encoding header, and
+    set the Vary header accordingly.
     """
 
+    max_random_bytes = 100
+
     def process_response(self, request, response):
-        # Test a few things before we even try:
-        #  - content is already encoded
-        #  - really short responses are not worth it
-        if response.has_header("Content-Encoding") or (
-            not response.streaming and len(response.content) < MIN_LEN
-        ):
+        # It's not worth attempting to compress really short responses.
+        if not response.streaming and len(response.content) < MIN_LEN:
+            return response
+
+        # Avoid compression if we've already got a content-encoding.
+        if response.has_header("Content-Encoding"):
             return response
 
         patch_vary_headers(response, ("Accept-Encoding",))
+
         ae = request.META.get("HTTP_ACCEPT_ENCODING", "")
-        encoding, compress_func, stream_func = compressor(ae)
-        if not encoding:
+        encoding, compress_string, compress_sequence = compressor(ae)
+        if encoding is None:
             # No compression in common with client (the client probably didn't
             # indicate support for anything).
             return response
 
+        compress_kwargs = {}
+        if encoding == "gzip" and django_version >= (4, 2):
+            compress_kwargs["max_random_bytes"] = self.max_random_bytes
+
         if response.streaming:
+            if getattr(response, "is_async", False):
+
+                # forward args explicitly to capture fixed references in
+                # case they are set again later.
+                async def compress_wrapper(streaming_content, **compress_kwargs):
+                    async for chunk in streaming_content:
+                        yield compress_string(
+                            chunk,
+                            **compress_kwargs,
+                        )
+
+                response.streaming_content = compress_wrapper(
+                    response.streaming_content,
+                    **compress_kwargs,
+                )
+            else:
+                response.streaming_content = compress_sequence(
+                    response.streaming_content,
+                    **compress_kwargs,
+                )
+
             # Delete the `Content-Length` header for streaming content, because
             # we won't know the compressed size until we stream it.
-            response.streaming_content = stream_func(response.streaming_content)
-            del response["Content-Length"]
+            del response.headers["Content-Length"]
         else:
-            #TODO: protect against excessive response size
-            compressed_content = compress_func(response.content)
-            # Return the compressed content only if compression is worth it
-            if len(compressed_content) >= len(response.content) - MIN_IMPROVEMENT:
+            # Return the compressed content only if it's actually shorter.
+            compressed_content = compress_string(
+                response.content,
+                **compress_kwargs,
+            )
+            if len(response.content) - len(compressed_content) < MIN_IMPROVEMENT:
                 return response
-
             response.content = compressed_content
-            response["Content-Length"] = str(len(response.content))
+            response.headers["Content-Length"] = str(len(response.content))
 
         # If there is a strong ETag, make it weak to fulfill the requirements
-        # of RFC 7232 section-2.1 while also allowing conditional request
+        # of RFC 9110 Section 8.8.1 while also allowing conditional request
         # matches on ETags.
-        # Django's ConditionalGetMiddleware relies upon this etag behaviour.
-        etag = response.get("ETag")
+        etag = response.headers.get("ETag")
         if etag and etag.startswith('"'):
-            response["ETag"] = "W/" + etag
-        response["Content-Encoding"] = encoding
+            response.headers["ETag"] = "W/" + etag
+        response.headers["Content-Encoding"] = encoding
 
         return response
